@@ -8,26 +8,27 @@ def bisection_recursive(f: Callable[[float], float], a: float, b: float, tol: fl
     f_b: float = f(b)
     f_c: float = f(c)
     
+    isErrorLessThanTolerance: bool = False;
+
     # Compute error percentage
     error = np.nan
     if prev_c != None:
-        error: float = abs((c - prev_c) / c) * 100 
+        error: float = abs((c - prev_c) / c)
+        # Check tolerance
+        isErrorLessThanTolerance = error < tol
     
     # Print iteration in table format
     print(f"{'Iteration':<10}{'a':<10}{'b':<10}{'c':<10}{'f(a)':<10}{'f(b)':<10}{'f(c)':<10}{'Error %':<10}")
-    print(f"{iteration:<10}{a:<10.6f}{b:<10.6f}{c:<10.6f}{f_a:<10.6f}{f_b:<10.6f}{f_c:<10.6f}{error if not np.isnan(error) else 'N/A':<10}")
+    print(f"{iteration:<10}{a:<10.6f}{b:<10.6f}{c:<10.6f}{f_a:<10.6f}{f_b:<10.6f}{f_c:<10.6f}{(error*100) if not np.isnan(error) else 'N/A':<10}")
     print()
-    
-    # Check tolerance
-    isMidpointLessThanTolerance: bool = abs(b - a)/2 < tol
 
-    if isMidpointLessThanTolerance:
+    if isErrorLessThanTolerance or f_c == 0:
         return c
     
     if f_a * f_c < 0:
         return bisection_recursive(f, a, c, tol, c, iteration + 1)
-    else:
-        return bisection_recursive(f, c, b, tol, c, iteration + 1)
+    
+    return bisection_recursive(f, c, b, tol, c, iteration + 1)
 
 def main():
     equation = input("Enter the function in terms of x (e.g., x**3 - 4*x - 9): ")
