@@ -22,7 +22,7 @@ def bisection_recursive(f: Callable[[float], float], a: float, b: float, tol: fl
     print(f"{iteration:<10}{a:<10.6f}{b:<10.6f}{c:<10.6f}{f_a:<10.6f}{f_b:<10.6f}{f_c:<10.6f}{(error*100) if not np.isnan(error) else 'N/A':<10}")
     print()
 
-    if isErrorLessThanTolerance or f_c == 0:
+    if isErrorLessThanTolerance:
         return c
     
     if f_a * f_c < 0:
